@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Ticket #{{ ticket.id }} - ServiceFlow IT Service Desk{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Breadcrumb & Top Bar -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/" class="text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% if current_user.role == 'admin' %}/admin/tickets{% else %}/tickets{% endif %}" class="text-decoration-none">Tickets</a></li>
+                    <li class="breadcrumb-item active">Ticket #{{ ticket.id }}</li>
+                </ol>
+            </nav>
+            <div>
+                <a href="{% if current_user.role == 'admin' %}/admin/tickets{% else %}/tickets{% endif %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left me-1"></i>Back to List
+                </a>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Ticket Info Main Column -->
+            <div class="col-lg-8">
+                <div class="card card-custom shadow-sm mb-4">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3">
+                        <div>
+                            <span class="badge bg-secondary me-2">Ticket #{{ ticket.id }}</span>
+                            <span class="badge badge-priority badge-priority-{{ ticket.priority }} me-2">{{ ticket.priority }} Priority</span>
+                            <span class="badge bg-light text-dark border">{{ ticket.category }}</span>
+                        </div>
+                        <div>
+                            <span class="badge badge-status badge-status-{{ ticket.status.replace(' ', '') }} fs-6">{{ ticket.status }}</span>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <h3 class="fw-bold mb-3">{{ ticket.title }}</h3>
+
+                        <h6 class="fw-bold text-muted uppercase small mb-2">Description / Issue Symptoms:</h6>
+                        <div class="p-3 bg-light rounded border text-dark mb-4 style-description" style="white-space: pre-wrap; font-size: 0.95rem; line-height: 1.6;">{{ ticket.description }}</div>
+
+                        <!-- Timestamps & Requester Meta -->
+                        <div class="row g-3 pt-3 border-top text-muted small">
+                            <div class="col-sm-6">
+                                <i class="bi bi-person me-1"></i><strong>Raised By:</strong> {{ ticket.creator.name }} ({{ ticket.creator.email }})
+                            </div>
+                            <div class="col-sm-6">
+                                <i class="bi bi-person-badge me-1"></i><strong>Assigned Admin:</strong>
+                                {% if ticket.assignee %}
+                                    <span class="text-primary fw-semibold">{{ ticket.assignee.name }}</span>
+                                {% else %}
+                                    <span class="fst-italic text-secondary">Unassigned</span>
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-6">
+                                <i class="bi bi-calendar-plus me-1"></i><strong>Created:</strong> {{ ticket.created_at.strftime('%Y-%m-%d %H:%M:%S') if ticket.created_at else 'N/A' }}
+                            </div>
+                            <div class="col-sm-6">
+                                <i class="bi bi-clock-history me-1"></i><strong>Last Updated:</strong> {{ ticket.updated_at.strftime('%Y-%m-%d %H:%M:%S') if ticket.updated_at else 'N/A' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Controls Sidebar (Visible to Admin Only) -->
+            <div class="col-lg-4">
+                {% if current_user.role == 'admin' %}
+                <div class="card card-custom shadow-sm mb-4 border-primary">
+                    <div class="card-header bg-primary text-white py-2">
+                        <h6 class="mb-0 fw-bold"><i class="bi bi-sliders me-1"></i> Admin Management Actions</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <!-- 1. Change Status -->
+                        <form action="/admin/tickets/{{ ticket.id }}/status" method="POST" class="mb-3 pb-3 border-bottom">
+                            <label for="new_status" class="form-label small fw-bold">Update Ticket Status</label>
+                            <div class="input-group">
+                                <select name="new_status" id="new_status" class="form-select form-select-sm">
+                                    <option value="Open" {% if ticket.status == 'Open' %}selected{% endif %}>Open</option>
+                                    <option value="Assigned" {% if ticket.status == 'Assigned' %}selected{% endif %}>Assigned</option>
+                                    <option value="In Progress" {% if ticket.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                    <option value="Resolved" {% if ticket.status == 'Resolved' %}selected{% endif %}>Resolved</option>
+                                    <option value="Closed" {% if ticket.status == 'Closed' %}selected{% endif %}>Closed</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                            </div>
+                            <div class="form-text text-muted" style="font-size: 0.75rem;">
+                                Workflow: Open → Assigned → In Progress → Resolved → Closed
+                            </div>
+                        </form>
+
+                        <!-- 2. Change Priority -->
+                        <form action="/admin/tickets/{{ ticket.id }}/priority" method="POST" class="mb-3 pb-3 border-bottom">
+                            <label for="new_priority" class="form-label small fw-bold">Update Priority Level</label>
+                            <div class="input-group">
+                                <select name="new_priority" id="new_priority" class="form-select form-select-sm">
+                                    <option value="Low" {% if ticket.priority == 'Low' %}selected{% endif %}>Low</option>
+                                    <option value="Medium" {% if ticket.priority == 'Medium' %}selected{% endif %}>Medium</option>
+                                    <option value="High" {% if ticket.priority == 'High' %}selected{% endif %}>High</option>
+                                    <option value="Critical" {% if ticket.priority == 'Critical' %}selected{% endif %}>Critical</option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-outline-primary">Save</button>
+                            </div>
+                        </form>
+
+                        <!-- 3. Assign Ticket -->
+                        <form action="/admin/tickets/{{ ticket.id }}/assign" method="POST">
+                            <label for="assignee_id" class="form-label small fw-bold">Assign to Administrator</label>
+                            <div class="input-group">
+                                <select name="assignee_id" id="assignee_id" class="form-select form-select-sm">
+                                    <option value="">Unassign</option>
+                                    <option value="{{ current_user.id }}" {% if ticket.assigned_to == current_user.id %}selected{% endif %}>
+                                        Assign to Me ({{ current_user.name }})
+                                    </option>
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-outline-success">Assign</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% else %}
+                <div class="card card-custom shadow-sm bg-light">
+                    <div class="card-body p-3 text-center text-muted">
+                        <i class="bi bi-info-circle fs-3 text-info d-block mb-2"></i>
+                        <h6 class="fw-bold mb-1">Ticket Workflow Status</h6>
+                        <p class="small mb-0">Your support ticket is currently <strong class="text-dark">{{ ticket.status }}</strong>. An IT administrator will review and resolve your request.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

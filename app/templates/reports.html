@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Reports & Analytics - ServiceFlow IT Service Desk{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+    <div>
+        <h2 class="fw-bold mb-1"><i class="bi bi-file-earmark-bar-graph text-primary me-2"></i>IT Service Desk Reports</h2>
+        <p class="text-muted mb-0">System performance analytics, ticket volume breakdown, and downloadable CSV reports.</p>
+    </div>
+    <div>
+        <a href="/admin/reports/export-csv" class="btn btn-success btn-lg shadow-sm">
+            <i class="bi bi-download me-2"></i>Export CSV Report
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- 1. Breakdown by Status -->
+    <div class="col-lg-4">
+        <div class="card card-custom h-100 shadow-sm">
+            <div class="card-header bg-dark text-white py-3">
+                <h5 class="card-title mb-0 fw-bold"><i class="bi bi-pie-chart me-2 text-info"></i>Tickets by Status</h5>
+            </div>
+            <div class="card-body p-4">
+                {% for st, count in status_data.items() %}
+                {% set pct = (count / total_tickets * 100) if total_tickets > 0 else 0 %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fw-semibold">{{ st }}</span>
+                        <span class="badge bg-secondary">{{ count }} ({{ '%.1f'|format(pct) }}%)</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar {% if st == 'Open' %}bg-info{% elif st == 'Assigned' %}bg-primary{% elif st == 'In Progress' %}bg-warning{% elif st == 'Resolved' %}bg-success{% else %}bg-secondary{% endif %}" role="progressbar" style="width: {{ pct }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Breakdown by Category -->
+    <div class="col-lg-4">
+        <div class="card card-custom h-100 shadow-sm">
+            <div class="card-header bg-dark text-white py-3">
+                <h5 class="card-title mb-0 fw-bold"><i class="bi bi-tags me-2 text-info"></i>Tickets by Category</h5>
+            </div>
+            <div class="card-body p-4">
+                {% for cat, count in category_data.items() %}
+                {% set pct = (count / total_tickets * 100) if total_tickets > 0 else 0 %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fw-semibold">{{ cat }}</span>
+                        <span class="badge bg-dark">{{ count }} ({{ '%.1f'|format(pct) }}%)</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ pct }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Breakdown by Priority -->
+    <div class="col-lg-4">
+        <div class="card card-custom h-100 shadow-sm">
+            <div class="card-header bg-dark text-white py-3">
+                <h5 class="card-title mb-0 fw-bold"><i class="bi bi-exclamation-triangle me-2 text-info"></i>Tickets by Priority</h5>
+            </div>
+            <div class="card-body p-4">
+                {% for prio, count in priority_data.items() %}
+                {% set pct = (count / total_tickets * 100) if total_tickets > 0 else 0 %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fw-semibold">{{ prio }}</span>
+                        <span class="badge badge-priority badge-priority-{{ prio }}">{{ count }} ({{ '%.1f'|format(pct) }}%)</span>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar {% if prio == 'Critical' %}bg-danger{% elif prio == 'High' %}bg-warning{% elif prio == 'Medium' %}bg-info{% else %}bg-secondary{% endif %}" role="progressbar" style="width: {{ pct }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Banner -->
+<div class="card bg-light border-primary mb-4">
+    <div class="card-body p-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h5 class="fw-bold text-primary mb-1"><i class="bi bi-file-earmark-spreadsheet me-2"></i>Download Full Ticket Summary</h5>
+            <p class="text-muted mb-0">Generate a comprehensive CSV file containing ticket details, category, priority, lifecycle status, creator email, assigned admin, and timestamps.</p>
+        </div>
+        <div>
+            <a href="/admin/reports/export-csv" class="btn btn-success px-4 py-2 fw-semibold">
+                <i class="bi bi-download me-1"></i>Download CSV (.csv)
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

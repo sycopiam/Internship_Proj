@@ -1,0 +1,261 @@
+/* ServiceFlow Enterprise IT Service Desk Stylesheet */
+
+:root {
+    --sf-dark-bg: #0f172a;
+    --sf-dark-card: #1e293b;
+    --sf-sidebar-bg: #111827;
+    --sf-accent-blue: #2563eb;
+    --sf-accent-hover: #1d4ed8;
+    --sf-body-bg: #f8fafc;
+    --sf-card-bg: #ffffff;
+    --sf-border-color: #e2e8f0;
+    --sf-text-main: #1e293b;
+    --sf-text-muted: #64748b;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--sf-body-bg);
+    color: var(--sf-text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navbar */
+.navbar-custom {
+    background-color: var(--sf-dark-bg);
+    border-bottom: 1px solid #1e293b;
+    padding: 0.75rem 1.5rem;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    font-size: 1.35rem;
+    color: #ffffff !important;
+}
+
+.navbar-brand span {
+    color: #38bdf8;
+}
+
+.nav-link {
+    color: #94a3b8 !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+}
+
+/* Subtitle Header */
+.app-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid #334155;
+    margin-bottom: 2rem;
+}
+
+.app-header h1 {
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 0.25rem;
+}
+
+.app-header p {
+    color: #94a3b8;
+    font-size: 1rem;
+}
+
+/* Dashboard Cards */
+.stat-card {
+    border: 1px solid var(--sf-border-color);
+    border-radius: 10px;
+    background: #ffffff;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 0.5rem;
+}
+
+.stat-label {
+    color: var(--sf-text-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Status Badges */
+.badge-status {
+    padding: 0.4em 0.75em;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 20px;
+    text-transform: capitalize;
+}
+
+.badge-status-Open {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-status-Assigned {
+    background-color: #f3e8ff;
+    color: #6b21a8;
+}
+
+.badge-status-In\ Progress, .badge-status-InProgress {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.badge-status-Resolved {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badge-status-Closed {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+/* Priority Badges */
+.badge-priority {
+    padding: 0.35em 0.65em;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border-radius: 4px;
+}
+
+.badge-priority-Low {
+    background-color: #e2e8f0;
+    color: #334155;
+}
+
+.badge-priority-Medium {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+.badge-priority-High {
+    background-color: #ffedd5;
+    color: #c2410c;
+}
+
+.badge-priority-Critical {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+/* Tables */
+.table-custom {
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--sf-border-color);
+}
+
+.table-custom th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--sf-border-color);
+}
+
+.table-custom td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.table-custom tr:last-child td {
+    border-bottom: none;
+}
+
+.table-custom tr:hover td {
+    background-color: #f8fafc;
+}
+
+/* Forms & Cards */
+.card-custom {
+    background: #ffffff;
+    border: 1px solid var(--sf-border-color);
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.card-custom .card-header {
+    background: #ffffff;
+    border-bottom: 1px solid var(--sf-border-color);
+    padding: 1.25rem 1.5rem;
+    font-weight: 700;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #334155;
+    font-size: 0.9rem;
+}
+
+.form-control, .form-select {
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    padding: 0.6rem 0.85rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--sf-accent-blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Intelligent Suggester Box */
+.suggestion-box {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    margin-top: 0.5rem;
+}
+
+.footer {
+    margin-top: auto;
+    background-color: var(--sf-dark-bg);
+    color: #64748b;
+    padding: 1.5rem 0;
+    font-size: 0.875rem;
+    border-top: 1px solid #1e293b;
+}

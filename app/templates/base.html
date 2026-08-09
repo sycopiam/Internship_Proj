@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ServiceFlow – IT Service Desk Management System{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
+        <div class="container-fluid max-width-container">
+            <a class="navbar-brand d-flex align-items-center me-4" href="/">
+                <i class="bi bi-headset me-2 text-info fs-4"></i>
+                <div>
+                    <div>Service<span>Flow</span></div>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarMain">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if current_user %}
+                        {% if current_user.role == 'admin' %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.url.path == '/admin/dashboard' %}active{% endif %}" href="/admin/dashboard">
+                                    <i class="bi bi-speedometer2 me-1"></i> Admin Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.url.path == '/admin/tickets' %}active{% endif %}" href="/admin/tickets">
+                                    <i class="bi bi-ticket-detailed me-1"></i> All Tickets
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.url.path == '/admin/reports' %}active{% endif %}" href="/admin/reports">
+                                    <i class="bi bi-bar-chart-line me-1"></i> Reports & Analytics
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.url.path == '/dashboard' %}active{% endif %}" href="/dashboard">
+                                    <i class="bi bi-grid-1x2 me-1"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.url.path == '/tickets' %}active{% endif %}" href="/tickets">
+                                    <i class="bi bi-ticket-perforated me-1"></i> My Tickets
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.url.path == '/tickets/create' %}active{% endif %}" href="/tickets/create">
+                                    <i class="bi bi-plus-circle me-1"></i> Raise IT Ticket
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    {% if current_user %}
+                        <div class="text-light d-flex align-items-center me-2">
+                            <span class="badge bg-secondary me-2 text-uppercase">{{ current_user.role }}</span>
+                            <span class="fw-semibold me-1"><i class="bi bi-person-circle me-1"></i>{{ current_user.name }}</span>
+                        </div>
+                        <a href="/auth/logout" class="btn btn-outline-light btn-sm px-3">
+                            <i class="bi bi-box-arrow-right me-1"></i> Logout
+                        </a>
+                    {% else %}
+                        <a href="/auth/login" class="btn btn-outline-light btn-sm px-3">Log In</a>
+                        <a href="/auth/register" class="btn btn-primary btn-sm px-3">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Global Alert Messages -->
+    <div class="container mt-3">
+        {% if msg %}
+            <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+                <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+                <div>{{ msg }}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endif %}
+        {% if error %}
+            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+                <div>{{ error }}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="container my-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container text-center">
+            <div class="fw-bold text-light mb-1">ServiceFlow</div>
+            <div class="text-muted small">IT Service Desk Management System • College Project inspired by ServiceNow ITSM Concepts</div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/bootstrap.bundle.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

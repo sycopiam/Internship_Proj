@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Create IT Ticket - ServiceFlow IT Service Desk{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card card-custom shadow-sm">
+            <div class="card-header bg-dark text-white py-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-plus-circle text-info me-2"></i>Submit IT Support Ticket</h4>
+                    <small class="text-muted">Fill in ticket details below. IT support will review and reassign accordingly.</small>
+                </div>
+                <a href="/tickets" class="btn btn-sm btn-outline-light"><i class="bi bi-arrow-left me-1"></i>Back to Tickets</a>
+            </div>
+            <div class="card-body p-4">
+                <form action="/tickets/create" method="POST" id="ticketForm">
+                    <!-- Title -->
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Ticket Title / Summary <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-lg" id="title" name="title" placeholder="e.g. WiFi connection dropping in East Wing room 3" required autofocus>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label for="description" class="form-label mb-0">Detailed Description <span class="text-danger">*</span></label>
+                            <button type="button" class="btn btn-sm btn-outline-primary" id="btnSuggestCategory">
+                                <i class="bi bi-magic me-1"></i>Suggest Category
+                            </button>
+                        </div>
+                        <textarea class="form-control" id="description" name="description" rows="4" placeholder="Describe the issue, steps to reproduce, or symptoms..." required></textarea>
+                        
+                        <!-- Intelligent Category Suggestion Box -->
+                        <div id="suggestionBox" class="suggestion-box d-none mt-2">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="fw-bold text-success mb-1">
+                                        <i class="bi bi-lightbulb-fill text-warning me-1"></i>
+                                        Category Recommendation: <span id="suggestedCatName" class="badge bg-success"></span>
+                                        <span id="confidenceBadge" class="badge bg-secondary ms-1"></span>
+                                    </div>
+                                    <div class="small text-muted mb-2">
+                                        Intelligent Rule Engine matched keywords: <strong id="matchedKeywordsList"></strong>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-success" id="btnAcceptSuggestion">
+                                    <i class="bi bi-check2 me-1"></i>Apply Suggestion
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <!-- Category -->
+                        <div class="col-md-6">
+                            <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                            <select class="form-select" id="category" name="category" required>
+                                <option value="Hardware">Hardware (Laptop, Desktop, Monitor, Mouse)</option>
+                                <option value="Software">Software (App crash, License, OS, Chrome)</option>
+                                <option value="Network">Network (WiFi, VPN, Ethernet, Internet)</option>
+                                <option value="Account">Account (Password reset, Access, Login)</option>
+                                <option value="Email">Email (Outlook, Mail sync, Attachments)</option>
+                                <option value="Other" selected>Other (General Requests)</option>
+                            </select>
+                        </div>
+
+                        <!-- Priority -->
+                        <div class="col-md-6">
+                            <label for="priority" class="form-label">Priority Level <span class="text-danger">*</span></label>
+                            <select class="form-select" id="priority" name="priority" required>
+                                <option value="Low">Low - General inquiry or low impact</option>
+                                <option value="Medium" selected>Medium - Normal business operation impact</option>
+                                <option value="High">High - Important issue affecting productivity</option>
+                                <option value="Critical">Critical - Work blocking / system outage</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="d-flex justify-content-end gap-2 border-top pt-3">
+                        <a href="/tickets" class="btn btn-light border px-4">Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                            <i class="bi bi-send me-1"></i>Submit Ticket
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const btnSuggest = document.getElementById("btnSuggestCategory");
+    const descInput = document.getElementById("description");
+    const suggestionBox = document.getElementById("suggestionBox");
+    const suggestedCatName = document.getElementById("suggestedCatName");
+    const confidenceBadge = document.getElementById("confidenceBadge");
+    const matchedKeywordsList = document.getElementById("matchedKeywordsList");
+    const btnAccept = document.getElementById("btnAcceptSuggestion");
+    const categorySelect = document.getElementById("category");
+
+    let lastSuggestedCategory = null;
+
+    async function triggerCategorySuggestion() {
+        const descText = descInput.value.trim();
+        if (!descText) {
+            alert("Please type a brief description first before requesting a category suggestion.");
+            return;
+        }
+
+        try {
+            btnSuggest.disabled = true;
+            btnSuggest.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Analyzing...';
+
+            const response = await fetch('/api/suggest-category', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ description: descText })
+            });
+
+            const result = await response.json();
+            btnSuggest.disabled = false;
+            btnSuggest.innerHTML = '<i class="bi bi-magic me-1"></i>Suggest Category';
+
+            if (result.suggested_category && result.suggested_category !== "Other") {
+                lastSuggestedCategory = result.suggested_category;
+                suggestedCatName.textContent = result.suggested_category;
+                confidenceBadge.textContent = result.confidence + " Confidence";
+                matchedKeywordsList.textContent = result.matched_keywords.length > 0 ? result.matched_keywords.join(", ") : "Text context";
+
+                suggestionBox.classList.remove("d-none");
+            } else {
+                alert("No specific category rules matched. Defaulting to 'Other'.");
+                suggestionBox.classList.add("d-none");
+            }
+        } catch (err) {
+            btnSuggest.disabled = false;
+            btnSuggest.innerHTML = '<i class="bi bi-magic me-1"></i>Suggest Category';
+            console.error("Suggestion error:", err);
+        }
+    }
+
+    btnSuggest.addEventListener("click", triggerCategorySuggestion);
+
+    btnAccept.addEventListener("click", function() {
+        if (lastSuggestedCategory) {
+            categorySelect.value = lastSuggestedCategory;
+            suggestionBox.classList.add("d-none");
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,168 @@
+Traceback (most recent call last):
+  File "<string>", line 3, in <module>
+    test_duplicate_registration_fails()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\besty\Desktop\vs_code\College_Proj\Internship_Proj\tests\test_auth.py", line 37, in test_duplicate_registration_fails
+    client.post(
+    ~~~~~~~~~~~^
+        "/auth/register",
+        ^^^^^^^^^^^^^^^^^
+        data={"name": "User One", "email": "dup@example.com", "password": "password123"}
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\testclient.py", line 556, in post
+    return super().post(
+           ~~~~~~~~~~~~^
+        url,
+        ^^^^
+    ...<10 lines>...
+        extensions=extensions,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\httpx\_client.py", line 1144, in post
+    return self.request(
+           ~~~~~~~~~~~~^
+        "POST",
+        ^^^^^^^
+    ...<11 lines>...
+        extensions=extensions,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\testclient.py", line 455, in request
+    return super().request(
+           ~~~~~~~~~~~~~~~^
+        method,
+        ^^^^^^^
+    ...<11 lines>...
+        extensions=extensions,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\httpx\_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\httpx\_client.py", line 914, in send
+    response = self._send_handling_auth(
+        request,
+    ...<2 lines>...
+        history=[],
+    )
+  File "C:\Users\besty\miniconda3\Lib\site-packages\httpx\_client.py", line 942, in _send_handling_auth
+    response = self._send_handling_redirects(
+        request,
+        follow_redirects=follow_redirects,
+        history=history,
+    )
+  File "C:\Users\besty\miniconda3\Lib\site-packages\httpx\_client.py", line 979, in _send_handling_redirects
+    response = self._send_single_request(request)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\httpx\_client.py", line 1014, in _send_single_request
+    response = transport.handle_request(request)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\testclient.py", line 354, in handle_request
+    raise exc
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\testclient.py", line 351, in handle_request
+    portal.call(self.app, scope, receive, send)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\anyio\from_thread.py", line 291, in call
+    return cast(T_Retval, self.start_task_soon(func, *args).result())
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\besty\miniconda3\Lib\concurrent\futures\_base.py", line 456, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\besty\miniconda3\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\besty\miniconda3\Lib\site-packages\anyio\from_thread.py", line 222, in _call_func
+    retval = await retval_or_awaitable
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\fastapi\applications.py", line 1163, in __call__
+    await super().__call__(scope, receive, send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\applications.py", line 96, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\middleware\errors.py", line 186, in __call__
+    raise exc
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\middleware\sessions.py", line 88, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\routing.py", line 670, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\anyio\to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\anyio\_backends\_asyncio.py", line 2476, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\anyio\_backends\_asyncio.py", line 967, in run
+    result = context.run(func, *args)
+  File "C:\Users\besty\Desktop\vs_code\College_Proj\Internship_Proj\app\routes\tickets.py", line 46, in user_dashboard
+    return templates.TemplateResponse(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        "dashboard.html",
+        ^^^^^^^^^^^^^^^^^
+    ...<11 lines>...
+        }
+        ^
+    )
+    ^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\templating.py", line 148, in TemplateResponse
+    template = self.get_template(name)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\starlette\templating.py", line 115, in get_template
+    return self.env.get_template(name)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\jinja2\environment.py", line 964, in _load_template
+    template = self.cache.get(cache_key)
+  File "C:\Users\besty\miniconda3\Lib\site-packages\jinja2\utils.py", line 477, in get
+    return self[key]
+           ~~~~^^^^^
+  File "C:\Users\besty\miniconda3\Lib\site-packages\jinja2\utils.py", line 515, in __getitem__
+    rv = self._mapping[key]
+         ~~~~~~~~~~~~~^^^^^
+TypeError: unhashable type: 'dict'

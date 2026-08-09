@@ -1,0 +1,28 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.5, pytest-9.1.1, pluggy-1.5.0 -- C:\Users\besty\miniconda3\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\besty\Desktop\vs_code\College_Proj\Internship_Proj
+plugins: anyio-4.10.0
+collecting ... collected 13 items
+
+tests/test_admin.py::test_admin_can_view_all_tickets PASSED              [  7%]
+tests/test_admin.py::test_admin_status_transition_rules PASSED           [ 15%]
+tests/test_admin.py::test_admin_export_csv_report PASSED                 [ 23%]
+tests/test_auth.py::test_user_registration PASSED                        [ 30%]
+tests/test_auth.py::test_duplicate_registration_fails PASSED             [ 38%]
+tests/test_auth.py::test_login_success_and_failure PASSED                [ 46%]
+tests/test_category_suggester.py::test_network_keyword_suggestion PASSED [ 53%]
+tests/test_category_suggester.py::test_hardware_keyword_suggestion PASSED [ 61%]
+tests/test_category_suggester.py::test_account_keyword_suggestion PASSED [ 69%]
+tests/test_category_suggester.py::test_email_keyword_suggestion PASSED   [ 76%]
+tests/test_category_suggester.py::test_software_keyword_suggestion PASSED [ 84%]
+tests/test_tickets.py::test_ticket_creation_by_user PASSED               [ 92%]
+tests/test_tickets.py::test_user_cannot_access_other_user_ticket PASSED  [100%]
+
+============================== warnings summary ===============================
+..\..\..\..\miniconda3\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\besty\miniconda3\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 13 passed, 1 warning in 5.93s ========================
